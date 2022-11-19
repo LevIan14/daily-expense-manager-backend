@@ -2,6 +2,7 @@ package com.example.DEM.controller;
 
 import com.example.DEM.BadRequestException;
 import com.example.DEM.entity.Category;
+import com.example.DEM.model.CategoryRequest;
 import com.example.DEM.model.CategoryResponse;
 import com.example.DEM.service.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,23 +27,21 @@ public class CategoryController {
     return categoryService.getDetailCategory(categoryId, userId);
   }
 
-//  @PutMapping("/update/{categoryId}&{userId}")
-//  public CategoryResponse getUpdateHistory(@PathVariable ("categoryId") int categoryId,
-//                                         @PathVariable("userId") int userId,
-//                                         @RequestBody() Category category){
-//    return categoryService.editCategory(categoryId, userId, category);
-//  }
+  @PutMapping("/update/{id}")
+  public CategoryResponse getUpdateHistory (@PathVariable ("id") int categoryId,
+                                         @RequestBody CategoryRequest categoryRequest){
+    return categoryService.editCategory(categoryId, categoryRequest);
+  }
 
   @PutMapping("/delete/{id}")
   public Boolean getDeleteHistory(@PathVariable ("id") int id) throws BadRequestException {
     return categoryService.deleteCategory(id);
   }
 
-  @PostMapping("/add/{categoryGroup}/{category}")
+  @PostMapping("/add/}")
   public CategoryResponse addTransaction(
-      @PathVariable("categoryGroup") String categoryGroup,
-      @PathVariable("category")String category
-  ){
-    return categoryService.addCategory(categoryGroup,category);
+      @RequestBody CategoryRequest categoryRequest
+      ){
+    return categoryService.addCategory(categoryRequest);
   }
 }
