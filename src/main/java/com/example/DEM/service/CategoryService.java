@@ -5,6 +5,7 @@ import com.example.DEM.entity.Category;
 import com.example.DEM.entity.CategoryGroup;
 import com.example.DEM.entity.Transaction;
 import com.example.DEM.entity.User;
+import com.example.DEM.model.CategoryRequest;
 import com.example.DEM.model.CategoryResponse;
 import com.example.DEM.repository.CategoryGroupRepository;
 import com.example.DEM.repository.CategoryRepository;
@@ -52,24 +53,24 @@ public class CategoryService implements ICategoryService {
   }
 
 
-//  @Override
-//  public CategoryResponse editCategory(int id, String categoryGroup, String category) {
-//    Category categoryEntity = categoryRepository.findByCategoryId(id);
-//    CategoryGroup categoryGroupEntity= categoryGroupRepository.findByCategoryGroupName(categoryGroup);
-//    categoryEntity.setCategoryName(category);
-//    categoryEntity.setCategoryGroup(categoryGroupEntity);
-//    return CategoryResponse.builder().categoryId(categoryEntity.getCategoryId())
-//        .categoryName(categoryEntity.getCategoryName())
-//        .categoryGroup(categoryEntity.getCategoryGroup().getCategoryGroupName()).build();
-//  }
+  @Override
+  public CategoryResponse editCategory(int id, CategoryRequest request) {
+    Category categoryEntity = categoryRepository.findByCategoryId(id);
+    CategoryGroup categoryGroupEntity= categoryGroupRepository.findByCategoryGroupId(request.getCategoryGroupId());
+    categoryEntity.setCategoryName(request.getName());
+    categoryEntity.setCategoryGroup(categoryGroupEntity);
+    return CategoryResponse.builder().categoryId(categoryEntity.getCategoryId())
+        .categoryName(categoryEntity.getCategoryName())
+        .categoryGroup(categoryEntity.getCategoryGroup().getCategoryGroupName()).build();
+  }
 
   @Override
-  public CategoryResponse addCategory(String categoryGroup, String category) {
+  public CategoryResponse addCategory(CategoryRequest categoryRequest) {
     String username=getUser();
     User user= userRepository.findByUsername(username);
-    CategoryGroup categoryGroupEntity= categoryGroupRepository.findByCategoryGroupName(categoryGroup);
+    CategoryGroup categoryGroupEntity= categoryGroupRepository.findByCategoryGroupId(categoryRequest.getCategoryGroupId());
     Category categoryEntity= new Category();
-    categoryEntity.setCategoryName(category);
+    categoryEntity.setCategoryName(categoryRequest.getName());
     categoryEntity.setCategoryGroup(categoryGroupEntity);
     categoryEntity.setUserCategory(user);
     categoryRepository.save(categoryEntity);
