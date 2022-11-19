@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CategoryGroupRepository extends JpaRepository<CategoryGroup,Integer> {
-  CategoryGroup findByCategoryGroupName (String name);
+  CategoryGroup findByCategoryGroupId (int id);
 }
