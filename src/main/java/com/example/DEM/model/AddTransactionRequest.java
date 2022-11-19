@@ -1,7 +1,5 @@
 package com.example.DEM.model;
 
-import com.example.DEM.entity.CategoryEntity;
-
 import java.math.BigDecimal;
 import java.util.Date;
 

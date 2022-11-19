@@ -1,6 +1,6 @@
 package com.example.DEM.model;
 
-import com.example.DEM.entity.UserEntity;
+import com.example.DEM.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,9 +10,9 @@ import java.util.Collection;
 
 public class MyUserDetail implements UserDetails {
 
-    private final UserEntity mUser;
+    private final User mUser;
 
-    public MyUserDetail(UserEntity user){
+    public MyUserDetail(User user){
         this.mUser = user;
     }
 

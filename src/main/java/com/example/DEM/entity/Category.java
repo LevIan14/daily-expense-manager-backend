@@ -12,21 +12,27 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "category")
-public class CategoryEntity {
+public class Category {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "category_id")
   private int categoryId;
-  @JsonIgnore
-  @ManyToOne
-  @JoinColumn(name = "category_group_id")
-  private CategoryGroupEntity categoryGroup;
-  @Column(name = "category_name")
-  private String categoryName;
-  @OneToMany(mappedBy = "category")
-  private List<HistoryEntitty> category;
+
   @JsonIgnore
   @ManyToOne
   @JoinColumn(name = "user_id")
-  private UserEntity userCategory;
+  private User userCategory;
+
+  @JsonIgnore
+  @ManyToOne
+  @JoinColumn(name = "category_group_id")
+  private CategoryGroup categoryGroup;
+
+  @Column(name = "category_name")
+  private String categoryName;
+
+  @OneToMany(mappedBy = "category")
+  private List<Transaction> category;
+
+
 }

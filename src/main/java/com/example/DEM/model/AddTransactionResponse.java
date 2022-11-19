@@ -1,7 +1,5 @@
 package com.example.DEM.model;
 
-import com.example.DEM.entity.CategoryEntity;
-import com.example.DEM.entity.UserEntity;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
@@ -18,7 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class AddTransactionResponse {
-  private int history_id;
+  private int transactionId;
   private int userHistory;
   private String categoryGroup;
   private String category;

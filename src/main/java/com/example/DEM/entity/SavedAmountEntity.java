@@ -21,7 +21,7 @@ public class SavedAmountEntity {
   @JsonIgnore
   @ManyToOne
   @JoinColumn(name = "user_id")
-  private UserEntity userAmount;
+  private User userAmount;
   @Column(name= "save_amount")
   private BigDecimal savedAmount;
 

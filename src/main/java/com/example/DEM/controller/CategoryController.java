@@ -1,9 +1,7 @@
-package com.example.DEM;
+package com.example.DEM.controller;
 
-import com.example.DEM.entity.CategoryEntity;
-import com.example.DEM.entity.HistoryEntitty;
-import com.example.DEM.model.AddTransactionRequest;
-import com.example.DEM.model.AddTransactionResponse;
+import com.example.DEM.BadRequestException;
+import com.example.DEM.entity.Category;
 import com.example.DEM.model.CategoryResponse;
 import com.example.DEM.service.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,19 +17,27 @@ public class CategoryController {
 
   @GetMapping("/list/{categoryGroup}")
   public List<CategoryResponse> getListCategory(@PathVariable("categoryGroup") String categoryGroup){
-    return categoryService.getCategory(categoryGroup);
+    return categoryService.getCategory(categoryGroup.toUpperCase());
   }
 
-  @PutMapping("/update/{id}/{categoryGroup}/{category}")
-  public CategoryResponse getUpdateHistory(@PathVariable ("id") int id,
-                                         @PathVariable("categoryGroup") String categoryGroup,
-                                         @PathVariable("category")String category){
-    return categoryService.editCategory(id,categoryGroup,category);
+  @GetMapping("/detail/{categoryId}/{userId}")
+  public CategoryResponse getDetailCategory(@PathVariable ("categoryId") int categoryId,
+                                            @PathVariable("userId") int userId) {
+    return categoryService.getDetailCategory(categoryId, userId);
   }
+
+//  @PutMapping("/update/{categoryId}&{userId}")
+//  public CategoryResponse getUpdateHistory(@PathVariable ("categoryId") int categoryId,
+//                                         @PathVariable("userId") int userId,
+//                                         @RequestBody() Category category){
+//    return categoryService.editCategory(categoryId, userId, category);
+//  }
+
   @PutMapping("/delete/{id}")
   public Boolean getDeleteHistory(@PathVariable ("id") int id) throws BadRequestException {
     return categoryService.deleteCategory(id);
   }
+
   @PostMapping("/add/{categoryGroup}/{category}")
   public CategoryResponse addTransaction(
       @PathVariable("categoryGroup") String categoryGroup,

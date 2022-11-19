@@ -1,6 +1,6 @@
-package com.example.DEM;
+package com.example.DEM.controller;
 
-import com.example.DEM.entity.HistoryEntitty;
+import com.example.DEM.entity.Transaction;
 import com.example.DEM.model.AddTransactionRequest;
 import com.example.DEM.model.AddTransactionResponse;
 import com.example.DEM.service.ITransactionService;
@@ -16,30 +16,34 @@ import java.util.List;
 public class TransactionController {
   @Autowired
   private ITransactionService iTransactionService;
+
   @GetMapping("/list")
-  public List<HistoryEntitty> getListHistory(){
+  public List<Transaction> getListHistory(){
     return iTransactionService.getListHistory();
   }
+
   @GetMapping("/list/{year}")
-  public List<HistoryEntitty> getListHistoryByYear(@PathVariable ("year") Date year){
+  public List<Transaction> getListHistoryByYear(@PathVariable ("year") Date year){
     return iTransactionService.getListHistoryByYear(year);
   }
+
   @GetMapping("/detail/{id}")
-  public HistoryEntitty getDetailHistory(@PathVariable ("id") int id){
+  public Transaction getDetailHistory(@PathVariable ("id") int id){
     return iTransactionService.getDetailHistory(id);
   }
+
   @PutMapping("/update/{id}")
   public AddTransactionResponse getUpdateHistory(@PathVariable ("id") int id, @RequestBody AddTransactionRequest request ){
-return iTransactionService.updateTransaction(id,request);
+    return iTransactionService.updateTransaction(id,request);
   }
+
   @PutMapping("/delete/{id}")
   public boolean getDeleteHistory(@PathVariable ("id") int id){
 return iTransactionService.deleteTransaction(id);
   }
+
   @PostMapping("/add")
-  public AddTransactionResponse addTransaction(
-      @RequestBody AddTransactionRequest request
-      ){
+  public AddTransactionResponse addTransaction(@RequestBody AddTransactionRequest request) {
     return iTransactionService.addTransaction(request);
   }
 }

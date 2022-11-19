@@ -12,24 +12,29 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@Table(name = "history")
-public class HistoryEntitty {
+@Table(name = "transaction")
+public class Transaction {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "history_id")
-  private int historyId;
+  @Column(name = "transaction_id")
+  private int transactionId;
+
   @JsonIgnore
   @ManyToOne
   @JoinColumn(name = "user_id")
-  private UserEntity userHistory;
+  private User userHistory;
+  
   @JsonIgnore
   @ManyToOne
-  @JoinColumn(name = "category")
-  private CategoryEntity category;
+  @JoinColumn(name = "category_id")
+  private Category category;
+
   @Column(name = "note")
   private String note;
+
   @Column(name = "amount")
   private BigDecimal amount;
+
   @Column(name = "date")
   private Date date;
 }

@@ -11,13 +11,15 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "category_group")
-public class CategoryGroupEntity {
+public class CategoryGroup {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "category_group_id")
   private int categoryGroupId;
+
   @Column(name = "category_group_name")
   private String categoryGroupName;
+
   @OneToMany(mappedBy = "categoryGroup")
-  private List<CategoryEntity> category;
+  private List<Category> category;
 }

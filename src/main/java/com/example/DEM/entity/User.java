@@ -11,22 +11,27 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "user")
-public class UserEntity {
+public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "user_id")
   private int id;
+
   @Column(name = "username")
   private String username;
+
   @Column(name = "password")
   private String password;
+
   @Column(name = "role")
   private String role;
-  @OneToMany(mappedBy = "userAmount")
-  private List<SavedAmountEntity> savedAmount;
-  @OneToMany(mappedBy = "userHistory")
-  private List<HistoryEntitty> history;
-  @OneToMany(mappedBy = "userCategory")
-  private List<CategoryEntity> category;
 
+//  @OneToMany(mappedBy = "userAmount")
+//  private List<SavedAmountEntity> savedAmount;
+
+//  @OneToMany(mappedBy = "userHistory")
+//  private List<Transaction> history;
+//
+  @OneToMany(mappedBy = "userCategory")
+  private List<Category> category;
 }

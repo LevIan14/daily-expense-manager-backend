@@ -1,14 +1,14 @@
 package com.example.DEM.service;
 
-import com.example.DEM.entity.CategoryEntity;
-import com.example.DEM.entity.HistoryEntitty;
+import com.example.DEM.entity.Category;
 import com.example.DEM.entity.SavedAmountEntity;
-import com.example.DEM.entity.UserEntity;
+import com.example.DEM.entity.Transaction;
+import com.example.DEM.entity.User;
 import com.example.DEM.model.AddTransactionRequest;
 import com.example.DEM.model.AddTransactionResponse;
 import com.example.DEM.repository.CategoryRepository;
-import com.example.DEM.repository.HistoryRepository;
 import com.example.DEM.repository.SavedAmountRepository;
+import com.example.DEM.repository.TransactionRepository;
 import com.example.DEM.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -21,7 +21,7 @@ import java.util.List;
 @Service
 public class TransactionService implements ITransactionService {
   @Autowired
-  HistoryRepository historyRepository;
+  TransactionRepository transactionRepository;
   @Autowired
   UserRepository userRepository;
   @Autowired
@@ -29,64 +29,64 @@ public class TransactionService implements ITransactionService {
   @Autowired
   CategoryRepository categoryRepository;
   @Override
-  public List<HistoryEntitty> getListHistory() {
-    String username=getUser();
-    return historyRepository.findByUserHistory_Username(username);
+  public List<Transaction> getListHistory() {
+    String username = getUser();
+    return transactionRepository.findByUserHistory_Username(username);
   }
 
   @Override
-  public List<HistoryEntitty> getListHistoryByYear(Date year) {
-    String username=getUser();
-    return historyRepository.findAllByDateContainingAndUserHistory_Username(year,username);
+  public List<Transaction> getListHistoryByYear(Date year) {
+    String username = getUser();
+    return transactionRepository.findAllByDateContainingAndUserHistory_Username(year,username);
   }
 
   @Override
-  public HistoryEntitty getDetailHistory(int id) {
-    return historyRepository.findByHistoryId(id);
+  public Transaction getDetailHistory(int id) {
+    return transactionRepository.findByTransactionId(id);
   }
-
 
   @Override
   public AddTransactionResponse updateTransaction(int id, AddTransactionRequest request) {
-    String username=getUser();
+    String username = getUser();
     System.out.println(username);
-    UserEntity user= userRepository.findByUsername(username);
-    SavedAmountEntity savedAmount= savedAmountRepository.findByUserAmount_Username(username);
-    CategoryEntity categoty = categoryRepository.findByCategoryName(request.getCategory());
-    HistoryEntitty history = historyRepository.findByHistoryId(id);
+    User user= userRepository.findByUsername(username);
+    SavedAmountEntity savedAmount = savedAmountRepository.findByUserAmount_Username(username);
+    Category category = categoryRepository.findByCategoryName(request.getCategory());
+    Transaction history = transactionRepository.findByTransactionId(id);
+
     if (history.getCategory().getCategoryGroup().getCategoryGroupName().equals("EXPENSE")){
       savedAmount.setSavedAmount(savedAmount.getSavedAmount().add(history.getAmount()));
-    }else if (history.getCategory().getCategoryGroup().getCategoryGroupName().equals("INCOME")){
+    } else if (history.getCategory().getCategoryGroup().getCategoryGroupName().equals("INCOME")){
       savedAmount.setSavedAmount(savedAmount.getSavedAmount().subtract(history.getAmount()));
     }
-    if (categoty.getCategoryGroup().getCategoryGroupName().equals("EXPENSE")){
+
+    if (category.getCategoryGroup().getCategoryGroupName().equals("EXPENSE")){
       savedAmount.setSavedAmount(savedAmount.getSavedAmount().subtract(request.getAmount()));
-    }
-    else if (categoty.getCategoryGroup().getCategoryGroupName().equals("INCOME")){
+    } else if (category.getCategoryGroup().getCategoryGroupName().equals("INCOME")){
       savedAmount.setSavedAmount(savedAmount.getSavedAmount().add(request.getAmount()));
     }
 
-    history.setCategory(categoty);
+    history.setCategory(category);
     history.setAmount(request.getAmount());
     history.setDate(request.getDate());
     history.setNote(request.getNote());
     history.setUserHistory(user);
-    historyRepository.save(history);
+    transactionRepository.save(history);
+
     return AddTransactionResponse.builder()
         .amount(history.getAmount())
         .category(history.getCategory().getCategoryName())
         .date(history.getDate())
-        .history_id(history.getHistoryId())
+        .transactionId(history.getTransactionId())
         .note(history.getNote())
         .savedAmount(savedAmount.getSavedAmount())
         .userHistory(history.getUserHistory().getId())
         .build();
-
   }
 
   @Override
   public boolean deleteTransaction(int id) {
-    HistoryEntitty history= historyRepository.findByHistoryId(id);
+    Transaction history= transactionRepository.findByTransactionId(id);
     SavedAmountEntity savedAmount= savedAmountRepository.findByUserAmount_Username(history.getUserHistory().getUsername());
     if (history.getCategory().getCategoryGroup().getCategoryGroupName().equals("EXPENSE")){
       savedAmount.setSavedAmount(savedAmount.getSavedAmount().add(history.getAmount()));
@@ -94,47 +94,47 @@ public class TransactionService implements ITransactionService {
     else if (history.getCategory().getCategoryGroup().getCategoryGroupName().equals("INCOME")){
       savedAmount.setSavedAmount(savedAmount.getSavedAmount().subtract(history.getAmount()));
     }
-    historyRepository.deleteByHistoryId(id);
+    transactionRepository.deleteByTransactionId(id);
     return true;
   }
 
   @Override
   public AddTransactionResponse addTransaction(AddTransactionRequest request) {
-    String username=getUser();
+    String username = getUser();
     System.out.println(username);
-    UserEntity user= userRepository.findByUsername(username);
+    User user= userRepository.findByUsername(username);
     SavedAmountEntity savedAmount= savedAmountRepository.findByUserAmount_Username(username);
-    CategoryEntity categoty = categoryRepository.findByCategoryName(request.getCategory());
-   if (categoty.getCategoryGroup().getCategoryGroupName().equals("EXPENSE")){
-     savedAmount.setSavedAmount(savedAmount.getSavedAmount().subtract(request.getAmount()));
-   }
-   else if (categoty.getCategoryGroup().getCategoryGroupName().equals("INCOME")){
-     savedAmount.setSavedAmount(savedAmount.getSavedAmount().add(request.getAmount()));
-   }
-      HistoryEntitty history = new HistoryEntitty();
-      history.setCategory(categoty);
-      history.setAmount(request.getAmount());
-      history.setDate(request.getDate());
-      history.setNote(request.getNote());
-      history.setUserHistory(user);
-      historyRepository.save(history);
+    Category categoty = categoryRepository.findByCategoryName(request.getCategory());
 
+    if (categoty.getCategoryGroup().getCategoryGroupName().equals("EXPENSE")) {
+      savedAmount.setSavedAmount(savedAmount.getSavedAmount().subtract(request.getAmount()));
+    } else if (categoty.getCategoryGroup().getCategoryGroupName().equals("INCOME")){
+      savedAmount.setSavedAmount(savedAmount.getSavedAmount().add(request.getAmount()));
+    }
+
+    Transaction history = new Transaction();
+    history.setCategory(categoty);
+    history.setAmount(request.getAmount());
+    history.setDate(request.getDate());
+    history.setNote(request.getNote());
+    history.setUserHistory(user);
+    transactionRepository.save(history);
 
     return AddTransactionResponse.builder()
         .amount(history.getAmount())
         .category(history.getCategory().getCategoryName())
         .date(history.getDate())
-        .history_id(history.getHistoryId())
+        .transactionId(history.getTransactionId())
         .note(history.getNote())
         .savedAmount(savedAmount.getSavedAmount())
         .userHistory(history.getUserHistory().getId())
         .build();
   }
+
   public String getUser(){
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (!(authentication instanceof AnonymousAuthenticationToken)) {
-      String currentUserName = authentication.getName();
-      return currentUserName;
+      return authentication.getName();
     }
     return null;
   }

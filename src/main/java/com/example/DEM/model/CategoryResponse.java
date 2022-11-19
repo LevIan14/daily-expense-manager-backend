@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class CategoryResponse {
-  private int id;
+  private int categoryId;
   private String categoryName;
   private String categoryGroup;
 }
