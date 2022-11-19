@@ -51,7 +51,7 @@ public class TransactionService implements ITransactionService {
     System.out.println(username);
     User user= userRepository.findByUsername(username);
     SavedAmountEntity savedAmount = savedAmountRepository.findByUserAmount_Username(username);
-    Category category = categoryRepository.findByCategoryName(request.getCategory());
+    Category category = categoryRepository.findByCategoryId(request.getCategoryId());
     Transaction history = transactionRepository.findByTransactionId(id);
 
     if (history.getCategory().getCategoryGroup().getCategoryGroupName().equals("EXPENSE")){
@@ -104,7 +104,7 @@ public class TransactionService implements ITransactionService {
     System.out.println(username);
     User user= userRepository.findByUsername(username);
     SavedAmountEntity savedAmount= savedAmountRepository.findByUserAmount_Username(username);
-    Category categoty = categoryRepository.findByCategoryName(request.getCategory());
+    Category categoty = categoryRepository.findByCategoryId(request.getCategoryId());
 
     if (categoty.getCategoryGroup().getCategoryGroupName().equals("EXPENSE")) {
       savedAmount.setSavedAmount(savedAmount.getSavedAmount().subtract(request.getAmount()));
