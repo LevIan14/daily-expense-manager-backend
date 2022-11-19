@@ -4,17 +4,17 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class AddTransactionRequest {
-  private String category;
+  private int categoryId;
   private String note;
   private BigDecimal amount;
   private Date date;
 
-  public String getCategory() {
-    return category;
+  public int getCategoryId() {
+    return categoryId;
   }
 
-  public void setCategory(String category) {
-    this.category = category;
+  public void setCategoryId(int categoryId) {
+    this.categoryId = categoryId;
   }
 
   public String getNote() {
