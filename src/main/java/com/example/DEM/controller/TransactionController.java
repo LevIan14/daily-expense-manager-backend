@@ -29,7 +29,7 @@ public class TransactionController {
   }
 
   @GetMapping("/detail/{id}")
-  public Transaction getDetailHistory(@PathVariable ("id") int id){
+  public AddTransactionResponse getDetailHistory(@PathVariable ("id") int id){
     return iTransactionService.getDetailHistory(id);
   }
 
