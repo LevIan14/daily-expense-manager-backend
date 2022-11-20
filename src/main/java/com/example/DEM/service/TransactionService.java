@@ -31,7 +31,7 @@ public class TransactionService implements ITransactionService {
   @Override
   public List<Transaction> getListHistory() {
     String username = getUser();
-    return transactionRepository.findByUserHistory_Username(username);
+    return transactionRepository.findByUserHistory_UsernameOrderByDateDesc(username);
   }
 
   @Override
