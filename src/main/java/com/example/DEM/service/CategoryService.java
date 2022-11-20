@@ -32,12 +32,17 @@ public class CategoryService implements ICategoryService {
   @Autowired
   TransactionRepository transactionRepository;
   @Override
-  public List<CategoryResponse> getCategory(String categoryGroup) {
+  public List<CategoryResponse> getCategory(int categoryGroupId) {
     String username = getUser();
+    User user = userRepository.findByUsername(username);
     List<CategoryResponse> responses = new ArrayList<>();
-    List<Category> category = categoryRepository.findByCategoryGroup_CategoryGroupNameAndUserCategory_Username(categoryGroup, username);
-    category.forEach(a->responses.add(CategoryResponse.builder().categoryId(a.getCategoryId()).categoryGroup(a.getCategoryGroup())
-        .categoryName(a.getCategoryName()).build()));
+//    List<Category> category = categoryRepository.findByCategoryGroup_CategoryGroupNameAndUserCategory_Username(categoryGroupId, username);
+    List<Category> category = categoryRepository.findByCategoryGroupIdAndUserId(categoryGroupId, user.getId());
+    category.forEach(a -> responses.add(CategoryResponse.builder()
+            .categoryId(a.getCategoryId())
+            .categoryGroup(a.getCategoryGroup())
+            .categoryName(a.getCategoryName())
+            .build()));
     return responses;
   }
 

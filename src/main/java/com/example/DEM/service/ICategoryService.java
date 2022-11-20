@@ -7,7 +7,7 @@ import com.example.DEM.model.CategoryResponse;
 import java.util.List;
 
 public interface ICategoryService {
-  List<CategoryResponse> getCategory (String categoryGroup);
+  List<CategoryResponse> getCategory (int categoryGroupId);
 
   CategoryResponse getDetailCategory(int categoryId);
 
