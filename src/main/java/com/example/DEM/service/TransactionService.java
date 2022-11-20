@@ -16,6 +16,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 @Service
@@ -42,14 +44,14 @@ public class TransactionService implements ITransactionService {
 
   @Override
   public Transaction getDetailHistory(int id) {
+    Transaction transaction = transactionRepository.findByTransactionId(id);
     return transactionRepository.findByTransactionId(id);
   }
 
   @Override
-  public AddTransactionResponse updateTransaction(int id, AddTransactionRequest request) {
+  public AddTransactionResponse updateTransaction(int id, AddTransactionRequest request) throws ParseException {
     String username = getUser();
-    System.out.println(username);
-    User user= userRepository.findByUsername(username);
+    User user = userRepository.findByUsername(username);
     SavedAmountEntity savedAmount = savedAmountRepository.findByUserAmount_Username(username);
     Category category = categoryRepository.findByCategoryId(request.getCategoryId());
     Transaction history = transactionRepository.findByTransactionId(id);
@@ -68,7 +70,7 @@ public class TransactionService implements ITransactionService {
 
     history.setCategory(category);
     history.setAmount(request.getAmount());
-    history.setDate(request.getDate());
+    history.setDate(new SimpleDateFormat("yyyy-MM-dd").parse(request.getDate()));
     history.setNote(request.getNote());
     history.setUserHistory(user);
     transactionRepository.save(history);
@@ -100,35 +102,33 @@ public class TransactionService implements ITransactionService {
   }
 
   @Override
-  public AddTransactionResponse addTransaction(AddTransactionRequest request) {
+  public AddTransactionResponse addTransaction(AddTransactionRequest request) throws ParseException {
     String username = getUser();
-    System.out.println(username);
-    User user= userRepository.findByUsername(username);
-    SavedAmountEntity savedAmount= savedAmountRepository.findByUserAmount_Username(username);
-    Category categoty = categoryRepository.findByCategoryId(request.getCategoryId());
-
-    if (categoty.getCategoryGroup().getCategoryGroupName().equals("EXPENSE")) {
+    User user = userRepository.findByUsername(username);
+    SavedAmountEntity savedAmount = savedAmountRepository.findByUserAmount_Username(username);
+    Category category = categoryRepository.findByCategoryId(request.getCategoryId());
+    if (category.getCategoryGroup().getCategoryGroupName().equals("EXPENSE")) {
       savedAmount.setSavedAmount(savedAmount.getSavedAmount().subtract(request.getAmount()));
-    } else if (categoty.getCategoryGroup().getCategoryGroupName().equals("INCOME")){
+    } else if (category.getCategoryGroup().getCategoryGroupName().equals("INCOME")){
       savedAmount.setSavedAmount(savedAmount.getSavedAmount().add(request.getAmount()));
     }
 
-    Transaction history = new Transaction();
-    history.setCategory(categoty);
-    history.setAmount(request.getAmount());
-    history.setDate(request.getDate());
-    history.setNote(request.getNote());
-    history.setUserHistory(user);
-    transactionRepository.save(history);
+    Transaction transaction = new Transaction();
+    transaction.setCategory(category);
+    transaction.setAmount(request.getAmount());
+    transaction.setDate(new SimpleDateFormat("yyyy-MM-dd").parse(request.getDate()));
+    transaction.setNote(request.getNote());
+    transaction.setUserHistory(user);
+    transactionRepository.save(transaction);
 
     return AddTransactionResponse.builder()
-        .amount(history.getAmount())
-        .category(history.getCategory().getCategoryName())
-        .date(history.getDate())
-        .transactionId(history.getTransactionId())
-        .note(history.getNote())
+        .amount(transaction.getAmount())
+        .category(transaction.getCategory().getCategoryName())
+        .date(transaction.getDate())
+        .transactionId(transaction.getTransactionId())
+        .note(transaction.getNote())
         .savedAmount(savedAmount.getSavedAmount())
-        .userHistory(history.getUserHistory().getId())
+        .userHistory(transaction.getUserHistory().getId())
         .build();
   }
 
