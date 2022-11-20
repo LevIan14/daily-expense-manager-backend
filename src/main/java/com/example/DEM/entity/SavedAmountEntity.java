@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity
-@Table(name = "seved_amount")
+@Table(name = "saved_amount")
 public class SavedAmountEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

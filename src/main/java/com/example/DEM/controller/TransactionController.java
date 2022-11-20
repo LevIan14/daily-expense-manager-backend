@@ -7,6 +7,7 @@ import com.example.DEM.service.ITransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class TransactionController {
   }
 
   @PutMapping("/update/{id}")
-  public AddTransactionResponse getUpdateHistory(@PathVariable ("id") int id, @RequestBody AddTransactionRequest request ){
+  public AddTransactionResponse getUpdateHistory(@PathVariable ("id") int id, @RequestBody AddTransactionRequest request ) throws ParseException {
     return iTransactionService.updateTransaction(id,request);
   }
 
@@ -43,7 +44,7 @@ return iTransactionService.deleteTransaction(id);
   }
 
   @PostMapping("/add")
-  public AddTransactionResponse addTransaction(@RequestBody AddTransactionRequest request) {
+  public AddTransactionResponse addTransaction(@RequestBody AddTransactionRequest request) throws ParseException {
     return iTransactionService.addTransaction(request);
   }
 }

@@ -7,7 +7,7 @@ public class AddTransactionRequest {
   private int categoryId;
   private String note;
   private BigDecimal amount;
-  private Date date;
+  private String date;
 
   public int getCategoryId() {
     return categoryId;
@@ -33,11 +33,11 @@ public class AddTransactionRequest {
     this.amount = amount;
   }
 
-  public Date getDate() {
+  public String getDate() {
     return date;
   }
 
-  public void setDate(Date date) {
+  public void setDate(String date) {
     this.date = date;
   }
 }
