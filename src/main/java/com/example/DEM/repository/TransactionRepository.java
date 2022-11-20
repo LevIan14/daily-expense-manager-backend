@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction,Integer> {
-  List<Transaction> findByUserHistory_Username (String Username);
+  List<Transaction> findByUserHistory_UsernameOrderByDateDesc (String Username);
   Transaction findByTransactionId (int id);
 
   void deleteByTransactionId(int id);
