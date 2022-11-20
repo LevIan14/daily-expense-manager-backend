@@ -19,12 +19,12 @@ public class TransactionController {
   private ITransactionService iTransactionService;
 
   @GetMapping("/list")
-  public List<Transaction> getListHistory(){
+  public List<AddTransactionResponse> getListHistory(){
     return iTransactionService.getListHistory();
   }
 
   @GetMapping("/list/{year}")
-  public List<Transaction> getListHistoryByYear(@PathVariable ("year") String year){
+  public List<AddTransactionResponse> getListHistoryByYear(@PathVariable ("year") String year){
     return iTransactionService.getListHistoryByYear(year);
   }
 
