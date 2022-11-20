@@ -43,9 +43,19 @@ public class TransactionService implements ITransactionService {
   }
 
   @Override
-  public Transaction getDetailHistory(int id) {
-    Transaction transaction = transactionRepository.findByTransactionId(id);
-    return transactionRepository.findByTransactionId(id);
+  public AddTransactionResponse getDetailHistory(int id) {
+    Transaction history = transactionRepository.findByTransactionId(id);
+    return AddTransactionResponse.builder()
+        .transactionId(history.getTransactionId())
+        .userHistory(history.getUserHistory().getId())
+        .categoryGroupId(history.getCategory().getCategoryGroup().getCategoryGroupId())
+        .categoryGroup(history.getCategory().getCategoryGroup().getCategoryGroupName())
+        .category(history.getCategory().getCategoryName())
+        .categoryId(history.getCategory().getCategoryId())
+        .note(history.getNote())
+        .amount(history.getAmount())
+        .date(history.getDate())
+        .build();
   }
 
   @Override
