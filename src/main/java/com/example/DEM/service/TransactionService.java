@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 @Service
@@ -31,15 +32,41 @@ public class TransactionService implements ITransactionService {
   @Autowired
   CategoryRepository categoryRepository;
   @Override
-  public List<Transaction> getListHistory() {
+  public List<AddTransactionResponse> getListHistory() {
     String username = getUser();
-    return transactionRepository.findByUserHistory_UsernameOrderByDateDesc(username);
+    List<AddTransactionResponse> responses= new ArrayList<>();
+    List<Transaction> history = transactionRepository.findByUserHistory_UsernameOrderByDateDesc(username);
+    history.forEach(a-> responses.add( AddTransactionResponse.builder()
+        .transactionId(a.getTransactionId())
+        .userHistory(a.getUserHistory().getId())
+        .categoryGroupId(a.getCategory().getCategoryGroup().getCategoryGroupId())
+        .categoryGroup(a.getCategory().getCategoryGroup().getCategoryGroupName())
+        .category(a.getCategory().getCategoryName())
+        .categoryId(a.getCategory().getCategoryId())
+        .note(a.getNote())
+        .amount(a.getAmount())
+        .date(a.getDate())
+        .build()));
+    return responses;
   }
 
   @Override
-  public List<Transaction> getListHistoryByYear(String year) {
+  public List<AddTransactionResponse> getListHistoryByYear(String year) {
     String username = getUser();
-    return transactionRepository.findAllByDateContainingAndUserHistory_Username(year,username);
+    List<AddTransactionResponse> responses= new ArrayList<>();
+    List<Transaction> history = transactionRepository.findAllByDateContainingAndUserHistory_Username(year,username);
+    history.forEach(a-> responses.add( AddTransactionResponse.builder()
+        .transactionId(a.getTransactionId())
+        .userHistory(a.getUserHistory().getId())
+        .categoryGroupId(a.getCategory().getCategoryGroup().getCategoryGroupId())
+        .categoryGroup(a.getCategory().getCategoryGroup().getCategoryGroupName())
+        .category(a.getCategory().getCategoryName())
+        .categoryId(a.getCategory().getCategoryId())
+        .note(a.getNote())
+        .amount(a.getAmount())
+        .date(a.getDate())
+        .build()));
+    return responses;
   }
 
   @Override
@@ -135,15 +162,15 @@ public class TransactionService implements ITransactionService {
     transactionRepository.save(transaction);
 
     return AddTransactionResponse.builder()
-        .transactionId(history.getTransactionId())
-        .userHistory(history.getUserHistory().getId())
-        .categoryGroupId(history.getCategory().getCategoryGroup().getCategoryGroupId())
-        .categoryGroup(history.getCategory().getCategoryGroup().getCategoryGroupName())
-        .category(history.getCategory().getCategoryName())
-        .categoryId(history.getCategory().getCategoryId())
-        .note(history.getNote())
-        .amount(history.getAmount())
-        .date(history.getDate())
+        .transactionId(transaction.getTransactionId())
+        .userHistory(transaction.getUserHistory().getId())
+        .categoryGroupId(transaction.getCategory().getCategoryGroup().getCategoryGroupId())
+        .categoryGroup(transaction.getCategory().getCategoryGroup().getCategoryGroupName())
+        .category(transaction.getCategory().getCategoryName())
+        .categoryId(transaction.getCategory().getCategoryId())
+        .note(transaction.getNote())
+        .amount(transaction.getAmount())
+        .date(transaction.getDate())
         .savedAmount(savedAmount.getSavedAmount())
         .build();
   }
