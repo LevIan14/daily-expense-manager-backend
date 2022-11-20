@@ -40,7 +40,7 @@ public class CategoryService implements ICategoryService {
     List<Category> category = categoryRepository.findByCategoryGroupIdAndUserId(categoryGroupId, user.getId());
     category.forEach(a -> responses.add(CategoryResponse.builder()
             .categoryId(a.getCategoryId())
-            .categoryGroupId(a.getCategoryGroup().getCategoryGroupId()))
+            .categoryGroupId(a.getCategoryGroup().getCategoryGroupId())
             .categoryName(a.getCategoryName())
             .build()));
     return responses;
