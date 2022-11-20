@@ -9,8 +9,8 @@ import java.util.Date;
 import java.util.List;
 
 public interface ITransactionService {
-  List<Transaction> getListHistory();
-  List<Transaction> getListHistoryByYear(String year);
+  List<AddTransactionResponse> getListHistory();
+  List<AddTransactionResponse> getListHistoryByYear(String year);
   AddTransactionResponse getDetailHistory(int id);
   AddTransactionResponse updateTransaction (int id,AddTransactionRequest request ) throws ParseException;
   boolean deleteTransaction (int id);
