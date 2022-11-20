@@ -15,9 +15,9 @@ public class CategoryController {
   @Autowired
   private ICategoryService categoryService;
 
-  @GetMapping("/list/{categoryGroup}")
-  public List<CategoryResponse> getListCategory(@PathVariable("categoryGroup") String categoryGroup){
-    return categoryService.getCategory(categoryGroup.toUpperCase());
+  @GetMapping("/list/{categoryGroupId}")
+  public List<CategoryResponse> getListCategory(@PathVariable("categoryGroupId") int  categoryGroupId){
+    return categoryService.getCategory(categoryGroupId);
   }
 
   @GetMapping("/detail/{categoryId}")
