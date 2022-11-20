@@ -53,7 +53,7 @@ public class CategoryService implements ICategoryService {
     Category category = categoryRepository.findByCategoryIdAndUserCategory(categoryId, Optional.ofNullable(user));
     return CategoryResponse.builder()
             .categoryId(category.getCategoryId())
-            .categoryGroupId(a.getCategoryGroup().getCategoryGroupId())
+            .categoryGroupId(category.getCategoryGroup().getCategoryGroupId())
             .categoryName(category.getCategoryName())
             .build();
   }
@@ -72,7 +72,7 @@ public class CategoryService implements ICategoryService {
     return CategoryResponse.builder()
             .categoryId(id)
             .categoryName(categoryEntity.getCategoryName())
-            .categoryGroupId(a.getCategoryGroup().getCategoryGroupId())
+            .categoryGroupId(categoryEntity.getCategoryGroup().getCategoryGroupId())
             .build();
   }
 
@@ -89,7 +89,7 @@ public class CategoryService implements ICategoryService {
 
     return CategoryResponse.builder()
         .categoryId(categoryEntity.getCategoryId())
-        .categoryGroupId(a.getCategoryGroup().getCategoryGroupId())
+        .categoryGroupId(categoryEntity.getCategoryGroup().getCategoryGroupId())
         .categoryName(categoryEntity.getCategoryName())
         .build();
   }
