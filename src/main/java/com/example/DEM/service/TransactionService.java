@@ -35,7 +35,7 @@ public class TransactionService implements ITransactionService {
   }
 
   @Override
-  public List<Transaction> getListHistoryByYear(Date year) {
+  public List<Transaction> getListHistoryByYear(String year) {
     String username = getUser();
     return transactionRepository.findAllByDateContainingAndUserHistory_Username(year,username);
   }
@@ -94,7 +94,8 @@ public class TransactionService implements ITransactionService {
     else if (history.getCategory().getCategoryGroup().getCategoryGroupName().equals("INCOME")){
       savedAmount.setSavedAmount(savedAmount.getSavedAmount().subtract(history.getAmount()));
     }
-    transactionRepository.deleteByTransactionId(id);
+    transactionRepository.deleteById(id);
+//    transactionRepository.deleteByTransactionId(id);
     return true;
   }
 

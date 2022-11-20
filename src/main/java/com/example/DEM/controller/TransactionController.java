@@ -23,7 +23,7 @@ public class TransactionController {
   }
 
   @GetMapping("/list/{year}")
-  public List<Transaction> getListHistoryByYear(@PathVariable ("year") Date year){
+  public List<Transaction> getListHistoryByYear(@PathVariable ("year") String year){
     return iTransactionService.getListHistoryByYear(year);
   }
 
@@ -37,7 +37,7 @@ public class TransactionController {
     return iTransactionService.updateTransaction(id,request);
   }
 
-  @PutMapping("/delete/{id}")
+  @DeleteMapping("/delete/{id}")
   public boolean getDeleteHistory(@PathVariable ("id") int id){
 return iTransactionService.deleteTransaction(id);
   }

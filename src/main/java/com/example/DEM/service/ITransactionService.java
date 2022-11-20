@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ITransactionService {
   List<Transaction> getListHistory();
-  List<Transaction> getListHistoryByYear(Date year);
+  List<Transaction> getListHistoryByYear(String year);
   Transaction getDetailHistory(int id);
   AddTransactionResponse updateTransaction (int id,AddTransactionRequest request );
   boolean deleteTransaction (int id);

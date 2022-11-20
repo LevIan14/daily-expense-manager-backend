@@ -3,6 +3,7 @@ package com.example.DEM.repository;
 import com.example.DEM.entity.Category;
 import com.example.DEM.entity.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -15,5 +16,6 @@ public interface TransactionRepository extends JpaRepository<Transaction,Integer
 
   void deleteByTransactionId(int id);
   Transaction findByCategoryAndUserHistory_Username(Category category, String username);
-  List<Transaction> findAllByDateContainingAndUserHistory_Username(Date year, String user);
+  @Query(value = "select * from transaction where year(date) like ?1", nativeQuery = true)
+  List<Transaction> findAllByDateContainingAndUserHistory_Username(String year, String user);
 }
