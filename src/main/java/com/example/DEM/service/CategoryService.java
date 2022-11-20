@@ -36,18 +36,19 @@ public class CategoryService implements ICategoryService {
     String username = getUser();
     List<CategoryResponse> responses = new ArrayList<>();
     List<Category> category = categoryRepository.findByCategoryGroup_CategoryGroupNameAndUserCategory_Username(categoryGroup, username);
-    category.forEach(a->responses.add(CategoryResponse.builder().categoryId(a.getCategoryId()).categoryGroup(a.getCategoryGroup().getCategoryGroupName())
+    category.forEach(a->responses.add(CategoryResponse.builder().categoryId(a.getCategoryId()).categoryGroup(a.getCategoryGroup())
         .categoryName(a.getCategoryName()).build()));
     return responses;
   }
 
   @Override
-  public CategoryResponse getDetailCategory(int categoryId, int userId) {
-    Optional<User> user = userRepository.findById(userId);
-    Category category = categoryRepository.findByCategoryIdAndUserCategory(categoryId, user);
+  public CategoryResponse getDetailCategory(int categoryId) {
+    String username = getUser();
+    User user = userRepository.findByUsername(username);
+    Category category = categoryRepository.findByCategoryIdAndUserCategory(categoryId, Optional.ofNullable(user));
     return CategoryResponse.builder()
             .categoryId(category.getCategoryId())
-            .categoryGroup(category.getCategoryGroup().getCategoryGroupName())
+            .categoryGroup(category.getCategoryGroup())
             .categoryName(category.getCategoryName())
             .build();
   }
@@ -56,19 +57,25 @@ public class CategoryService implements ICategoryService {
   @Override
   public CategoryResponse editCategory(int id, CategoryRequest request) {
     Category categoryEntity = categoryRepository.findByCategoryId(id);
-    CategoryGroup categoryGroupEntity= categoryGroupRepository.findByCategoryGroupId(request.getCategoryGroupId());
+    CategoryGroup categoryGroupEntity = categoryGroupRepository.findByCategoryGroupId(request.getCategoryGroupId());
+    categoryEntity.setCategoryId(id);
     categoryEntity.setCategoryName(request.getName());
     categoryEntity.setCategoryGroup(categoryGroupEntity);
-    return CategoryResponse.builder().categoryId(categoryEntity.getCategoryId())
-        .categoryName(categoryEntity.getCategoryName())
-        .categoryGroup(categoryEntity.getCategoryGroup().getCategoryGroupName()).build();
+
+    categoryRepository.save(categoryEntity);
+
+    return CategoryResponse.builder()
+            .categoryId(id)
+            .categoryName(categoryEntity.getCategoryName())
+            .categoryGroup(categoryEntity.getCategoryGroup())
+            .build();
   }
 
   @Override
   public CategoryResponse addCategory(CategoryRequest categoryRequest) {
-    String username=getUser();
+    String username = getUser();
     User user= userRepository.findByUsername(username);
-    CategoryGroup categoryGroupEntity= categoryGroupRepository.findByCategoryGroupId(categoryRequest.getCategoryGroupId());
+    CategoryGroup categoryGroupEntity = categoryGroupRepository.findByCategoryGroupId(categoryRequest.getCategoryGroupId());
     Category categoryEntity= new Category();
     categoryEntity.setCategoryName(categoryRequest.getName());
     categoryEntity.setCategoryGroup(categoryGroupEntity);
@@ -77,7 +84,7 @@ public class CategoryService implements ICategoryService {
 
     return CategoryResponse.builder()
         .categoryId(categoryEntity.getCategoryId())
-        .categoryGroup(categoryEntity.getCategoryGroup().getCategoryGroupName())
+        .categoryGroup(categoryEntity.getCategoryGroup())
         .categoryName(categoryEntity.getCategoryName())
         .build();
   }
@@ -85,14 +92,14 @@ public class CategoryService implements ICategoryService {
   @Override
   public Boolean deleteCategory(int id) throws BadRequestException {
     String username = getUser();
-    Category category =categoryRepository.findByCategoryId(id);
-    Transaction history= transactionRepository.findByCategoryAndUserHistory_Username(category,username);
-    if (history!= null){
-      categoryRepository.deleteByCategoryId(id);
+    Category category = categoryRepository.findByCategoryId(id);
+    Transaction transaction = transactionRepository.findByCategoryAndUserHistory_Username(category,username);
+    if (transaction == null){
+      categoryRepository.deleteById(id);
       return true;
     }
     else {
-      throw new BadRequestException("Categori tersebut sedang digunakan");
+      throw new BadRequestException("Kategori tersebut sedang digunakan");
     }
   }
 

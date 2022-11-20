@@ -8,10 +8,12 @@ import java.util.List;
 
 public interface ICategoryService {
   List<CategoryResponse> getCategory (String categoryGroup);
-  CategoryResponse getDetailCategory(int categoryId, int userId);
+
+  CategoryResponse getDetailCategory(int categoryId);
 
   CategoryResponse editCategory(int id, CategoryRequest categoryRequest);
 
   CategoryResponse addCategory (CategoryRequest categoryRequest);
+
   Boolean deleteCategory(int id) throws BadRequestException;
 }

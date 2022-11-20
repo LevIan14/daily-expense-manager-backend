@@ -1,5 +1,6 @@
 package com.example.DEM.model;
 
+import com.example.DEM.entity.CategoryGroup;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
@@ -15,5 +16,5 @@ import lombok.NoArgsConstructor;
 public class CategoryResponse {
   private int categoryId;
   private String categoryName;
-  private String categoryGroup;
+  private CategoryGroup categoryGroup;
 }
