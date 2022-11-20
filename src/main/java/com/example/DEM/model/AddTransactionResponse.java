@@ -18,7 +18,9 @@ import java.util.Date;
 public class AddTransactionResponse {
   private int transactionId;
   private int userHistory;
+  private int categoryGroupId;
   private String categoryGroup;
+  private int categoryId;
   private String category;
   private String note;
   private BigDecimal amount;
