@@ -76,13 +76,16 @@ public class TransactionService implements ITransactionService {
     transactionRepository.save(history);
 
     return AddTransactionResponse.builder()
-        .amount(history.getAmount())
-        .category(history.getCategory().getCategoryName())
-        .date(history.getDate())
         .transactionId(history.getTransactionId())
-        .note(history.getNote())
-        .savedAmount(savedAmount.getSavedAmount())
         .userHistory(history.getUserHistory().getId())
+        .categoryGroupId(history.getCategory().getCategoryGroup().getCategoryGroupId())
+        .categoryGroup(history.getCategory().getCategoryGroup().getCategoryGroupName())
+        .category(history.getCategory().getCategoryName())
+        .categoryId(history.getCategory().getCategoryId())
+        .note(history.getNote())
+        .amount(history.getAmount())
+        .date(history.getDate())
+        .savedAmount(savedAmount.getSavedAmount())
         .build();
   }
 
@@ -122,13 +125,16 @@ public class TransactionService implements ITransactionService {
     transactionRepository.save(transaction);
 
     return AddTransactionResponse.builder()
-        .amount(transaction.getAmount())
-        .category(transaction.getCategory().getCategoryName())
-        .date(transaction.getDate())
-        .transactionId(transaction.getTransactionId())
-        .note(transaction.getNote())
+        .transactionId(history.getTransactionId())
+        .userHistory(history.getUserHistory().getId())
+        .categoryGroupId(history.getCategory().getCategoryGroup().getCategoryGroupId())
+        .categoryGroup(history.getCategory().getCategoryGroup().getCategoryGroupName())
+        .category(history.getCategory().getCategoryName())
+        .categoryId(history.getCategory().getCategoryId())
+        .note(history.getNote())
+        .amount(history.getAmount())
+        .date(history.getDate())
         .savedAmount(savedAmount.getSavedAmount())
-        .userHistory(transaction.getUserHistory().getId())
         .build();
   }
 
