@@ -34,7 +34,8 @@ public class TransactionController {
   }
 
   @PutMapping("/update/{id}")
-  public AddTransactionResponse getUpdateHistory(@PathVariable ("id") int id, @RequestBody AddTransactionRequest request ) throws ParseException {
+  public AddTransactionResponse getUpdateHistory(@PathVariable ("id") int id,
+                                                 @RequestBody AddTransactionRequest request) throws ParseException {
     return iTransactionService.updateTransaction(id,request);
   }
 

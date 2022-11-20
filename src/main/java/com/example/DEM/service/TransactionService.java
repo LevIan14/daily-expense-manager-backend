@@ -37,52 +37,53 @@ public class TransactionService implements ITransactionService {
     List<AddTransactionResponse> responses= new ArrayList<>();
     List<Transaction> history = transactionRepository.findByUserHistory_UsernameOrderByDateDesc(username);
     history.forEach(a-> responses.add( AddTransactionResponse.builder()
-        .transactionId(a.getTransactionId())
-        .userHistory(a.getUserHistory().getId())
-        .categoryGroupId(a.getCategory().getCategoryGroup().getCategoryGroupId())
-        .categoryGroup(a.getCategory().getCategoryGroup().getCategoryGroupName())
-        .category(a.getCategory().getCategoryName())
-        .categoryId(a.getCategory().getCategoryId())
-        .note(a.getNote())
-        .amount(a.getAmount())
-        .date(a.getDate())
-        .build()));
+            .transactionId(a.getTransactionId())
+            .userHistory(a.getUserHistory().getId())
+            .categoryGroupId(a.getCategory().getCategoryGroup().getCategoryGroupId())
+            .categoryGroup(a.getCategory().getCategoryGroup().getCategoryGroupName())
+            .category(a.getCategory().getCategoryName())
+            .categoryId(a.getCategory().getCategoryId())
+            .note(a.getNote())
+            .amount(a.getAmount())
+            .date(a.getDate())
+            .build()));
     return responses;
   }
 
   @Override
   public List<AddTransactionResponse> getListHistoryByYear(String year) {
     String username = getUser();
+    User user = userRepository.findByUsername(username);
     List<AddTransactionResponse> responses= new ArrayList<>();
-    List<Transaction> history = transactionRepository.findAllByDateContainingAndUserHistory_Username(year,username);
+    List<Transaction> history = transactionRepository.findAllByDateContainingAndUserHistory_Username(year, user.getId());
     history.forEach(a-> responses.add( AddTransactionResponse.builder()
-        .transactionId(a.getTransactionId())
-        .userHistory(a.getUserHistory().getId())
-        .categoryGroupId(a.getCategory().getCategoryGroup().getCategoryGroupId())
-        .categoryGroup(a.getCategory().getCategoryGroup().getCategoryGroupName())
-        .category(a.getCategory().getCategoryName())
-        .categoryId(a.getCategory().getCategoryId())
-        .note(a.getNote())
-        .amount(a.getAmount())
-        .date(a.getDate())
-        .build()));
+            .transactionId(a.getTransactionId())
+            .userHistory(a.getUserHistory().getId())
+            .categoryGroupId(a.getCategory().getCategoryGroup().getCategoryGroupId())
+            .categoryGroup(a.getCategory().getCategoryGroup().getCategoryGroupName())
+            .category(a.getCategory().getCategoryName())
+            .categoryId(a.getCategory().getCategoryId())
+            .note(a.getNote())
+            .amount(a.getAmount())
+            .date(a.getDate())
+            .build()));
     return responses;
   }
 
   @Override
   public AddTransactionResponse getDetailHistory(int id) {
-    Transaction history = transactionRepository.findByTransactionId(id);
+    Transaction transaction = transactionRepository.findByTransactionId(id);
     return AddTransactionResponse.builder()
-        .transactionId(history.getTransactionId())
-        .userHistory(history.getUserHistory().getId())
-        .categoryGroupId(history.getCategory().getCategoryGroup().getCategoryGroupId())
-        .categoryGroup(history.getCategory().getCategoryGroup().getCategoryGroupName())
-        .category(history.getCategory().getCategoryName())
-        .categoryId(history.getCategory().getCategoryId())
-        .note(history.getNote())
-        .amount(history.getAmount())
-        .date(history.getDate())
-        .build();
+            .transactionId(transaction.getTransactionId())
+            .userHistory(transaction.getUserHistory().getId())
+            .categoryGroupId(transaction.getCategory().getCategoryGroup().getCategoryGroupId())
+            .categoryGroup(transaction.getCategory().getCategoryGroup().getCategoryGroupName())
+            .category(transaction.getCategory().getCategoryName())
+            .categoryId(transaction.getCategory().getCategoryId())
+            .note(transaction.getNote())
+            .amount(transaction.getAmount())
+            .date(transaction.getDate())
+            .build();
   }
 
   @Override
@@ -113,17 +114,17 @@ public class TransactionService implements ITransactionService {
     transactionRepository.save(history);
 
     return AddTransactionResponse.builder()
-        .transactionId(history.getTransactionId())
-        .userHistory(history.getUserHistory().getId())
-        .categoryGroupId(history.getCategory().getCategoryGroup().getCategoryGroupId())
-        .categoryGroup(history.getCategory().getCategoryGroup().getCategoryGroupName())
-        .category(history.getCategory().getCategoryName())
-        .categoryId(history.getCategory().getCategoryId())
-        .note(history.getNote())
-        .amount(history.getAmount())
-        .date(history.getDate())
-        .savedAmount(savedAmount.getSavedAmount())
-        .build();
+            .transactionId(history.getTransactionId())
+            .userHistory(history.getUserHistory().getId())
+            .categoryGroupId(history.getCategory().getCategoryGroup().getCategoryGroupId())
+            .categoryGroup(history.getCategory().getCategoryGroup().getCategoryGroupName())
+            .category(history.getCategory().getCategoryName())
+            .categoryId(history.getCategory().getCategoryId())
+            .note(history.getNote())
+            .amount(history.getAmount())
+            .date(history.getDate())
+            .savedAmount(savedAmount.getSavedAmount())
+            .build();
   }
 
   @Override
@@ -137,7 +138,6 @@ public class TransactionService implements ITransactionService {
       savedAmount.setSavedAmount(savedAmount.getSavedAmount().subtract(history.getAmount()));
     }
     transactionRepository.deleteById(id);
-//    transactionRepository.deleteByTransactionId(id);
     return true;
   }
 
@@ -162,17 +162,17 @@ public class TransactionService implements ITransactionService {
     transactionRepository.save(transaction);
 
     return AddTransactionResponse.builder()
-        .transactionId(transaction.getTransactionId())
-        .userHistory(transaction.getUserHistory().getId())
-        .categoryGroupId(transaction.getCategory().getCategoryGroup().getCategoryGroupId())
-        .categoryGroup(transaction.getCategory().getCategoryGroup().getCategoryGroupName())
-        .category(transaction.getCategory().getCategoryName())
-        .categoryId(transaction.getCategory().getCategoryId())
-        .note(transaction.getNote())
-        .amount(transaction.getAmount())
-        .date(transaction.getDate())
-        .savedAmount(savedAmount.getSavedAmount())
-        .build();
+            .transactionId(transaction.getTransactionId())
+            .userHistory(transaction.getUserHistory().getId())
+            .categoryGroupId(transaction.getCategory().getCategoryGroup().getCategoryGroupId())
+            .categoryGroup(transaction.getCategory().getCategoryGroup().getCategoryGroupName())
+            .category(transaction.getCategory().getCategoryName())
+            .categoryId(transaction.getCategory().getCategoryId())
+            .note(transaction.getNote())
+            .amount(transaction.getAmount())
+            .date(transaction.getDate())
+            .savedAmount(savedAmount.getSavedAmount())
+            .build();
   }
 
   public String getUser(){

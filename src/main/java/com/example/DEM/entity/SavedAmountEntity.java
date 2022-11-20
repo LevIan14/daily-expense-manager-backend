@@ -22,7 +22,7 @@ public class SavedAmountEntity {
   @ManyToOne
   @JoinColumn(name = "user_id")
   private User userAmount;
-  @Column(name= "save_amount")
+  @Column(name= "saved_amount")
   private BigDecimal savedAmount;
 
 }

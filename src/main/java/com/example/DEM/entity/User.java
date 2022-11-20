@@ -26,12 +26,12 @@ public class User {
   @Column(name = "role")
   private String role;
 
-//  @OneToMany(mappedBy = "userAmount")
-//  private List<SavedAmountEntity> savedAmount;
+  @OneToMany(mappedBy = "userAmount")
+  private List<SavedAmountEntity> savedAmount;
 
-//  @OneToMany(mappedBy = "userHistory")
-//  private List<Transaction> history;
-//
+  @OneToMany(mappedBy = "userHistory")
+  private List<Transaction> transactions;
+
   @OneToMany(mappedBy = "userCategory")
   private List<Category> category;
 }

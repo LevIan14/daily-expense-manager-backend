@@ -16,6 +16,6 @@ public interface TransactionRepository extends JpaRepository<Transaction,Integer
 
   void deleteByTransactionId(int id);
   Transaction findByCategoryAndUserHistory_Username(Category category, String username);
-  @Query(value = "select * from transaction where year(date) like ?1", nativeQuery = true)
-  List<Transaction> findAllByDateContainingAndUserHistory_Username(String year, String user);
+  @Query(value = "select * from transaction where year(date) like ?1 and user_id like ?2 order by date desc", nativeQuery = true)
+  List<Transaction> findAllByDateContainingAndUserHistory_Username(String year, int userId);
 }
